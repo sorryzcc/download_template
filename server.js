@@ -4,28 +4,26 @@ const path = require('path');
 const app = express();
 const port = 3000;
 
-app.get('/download', async (req, res) => {
-    // 创建新的工作簿
+app.get('/modify', async (req, res) => {
+    // 读取现有的工作簿
     const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet('My Sheet');
+    await workbook.xlsx.readFile(path.resolve(__dirname, '导入模板.xlsx'));
 
-    // 添加一些数据
-    worksheet.columns = [
-        { header: '文本变动信息', key: 'id', width: 10 },
-        { header: 'Name', key: 'name', width: 32 },
-        { header: '', key: 'dob', width: 15 },
-        { header: 'D.O.B.', key: 'dob', width: 15 },
-        { header: 'D.O.B.', key: 'dob', width: 15 },
-    ];
+    // 获取第一个工作表
+    const worksheet = workbook.getWorksheet(1);
 
+
+
+    // 清除现有行并添加新行
+    worksheet.spliceRows(1, worksheet.rowCount); // 删除所有行
     worksheet.addRow({ id: 1, name: 'John Doe', dob: new Date(1970, 1, 1) });
     worksheet.addRow({ id: 2, name: 'Jane Doe', dob: new Date(1965, 1, 7) });
 
     // 设置响应头
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    res.setHeader("Content-Disposition", "attachment; filename=" + "report.xlsx");
+    res.setHeader("Content-Disposition", "attachment; filename=" + "modified-report.xlsx");
 
-    // 发送Excel文件给客户端
+    // 发送修改后的Excel文件给客户端
     await workbook.xlsx.write(res);
     res.end();
 });
