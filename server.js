@@ -4,7 +4,7 @@ const path = require('path');
 const app = express();
 const port = 3000;
 
-app.get('/modify', async (req, res) => {
+app.get('/download', async (req, res) => {
     // 读取现有的工作簿
     const workbook = new ExcelJS.Workbook();
     await workbook.xlsx.readFile(path.resolve(__dirname, '导入模板.xlsx'));
