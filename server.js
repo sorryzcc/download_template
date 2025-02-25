@@ -21,7 +21,7 @@ app.get('/download', async (req, res) => {
 
     // 设置响应头
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    res.setHeader("Content-Disposition", "attachment; filename=" + "modified-report.xlsx");
+    res.setHeader("Content-Disposition", "attachment; filename=" + "ImportTemplate.xlsx");
 
     // 发送修改后的Excel文件给客户端
     await workbook.xlsx.write(res);
